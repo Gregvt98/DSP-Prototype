@@ -6,9 +6,13 @@ Description of the app ...
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://starter-kit.streamlitapp.com/)
 
-## Section Heading
+## Install dependenciues
 
-This is filler text, please replace this with text for this section.
+Run "pip install -r requirements.txt"
+
+## Run the app
+
+Run this command fron the root repository > "streamlit run home.py"
 
 ## Further Reading
 
