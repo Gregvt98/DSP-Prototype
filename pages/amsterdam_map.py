@@ -26,9 +26,7 @@ def from_data_file(filename):
 try:
     
     uitchecks = pd.read_csv('gvb_uitchecks_171022.csv')
-
     uitchecks = uitchecks.set_index('AankomstHalteNaam').dropna().loc[:,['AankomstLat', 'AankomstLon', 'AantalReizen']]
-    uitchecks = uitchecks[9:]
     uitchecks_summed = uitchecks.groupby('AankomstHalteNaam').aggregate(sum)
 
     uitchecks['lon'] = uitchecks['AankomstLat']
@@ -38,7 +36,6 @@ try:
     uitchecks['total_journeys'] = [sum_dict[i] for i in uitchecks.index]
     uitchecks = uitchecks[~uitchecks.index.duplicated(keep='first')]
     print(uitchecks)
-
 
     ALL_LAYERS = {
         "Public Transport": pdk.Layer(
@@ -51,7 +48,7 @@ try:
             extruded=True,
             
         ),
-        "Bart Stop Exits": pdk.Layer(
+        "Circle Map": pdk.Layer(
             "ScatterplotLayer",
             data=uitchecks,
             get_position=["lon", "lat"],
