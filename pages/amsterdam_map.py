@@ -25,28 +25,40 @@ def from_data_file(filename):
 
 try:
     
-    bikes = from_data_file("bike_rental_stats.json")
-    print(bikes)
     uitchecks = pd.read_csv('gvb_uitchecks_171022.csv')
-    uitchecks = uitchecks.set_index('AankomstHalteNaam').dropna().loc[:,['AankomstLat', 'AankomstLon']]
+
+    uitchecks = uitchecks.set_index('AankomstHalteNaam').dropna().loc[:,['AankomstLat', 'AankomstLon', 'AantalReizen']]
     uitchecks = uitchecks[9:]
+    uitchecks_summed = uitchecks.groupby('AankomstHalteNaam').aggregate(sum)
+
     uitchecks['lon'] = uitchecks['AankomstLat']
     uitchecks['lat'] = uitchecks['AankomstLon']
 
+    sum_dict = dict(zip(uitchecks_summed.index, uitchecks_summed['AantalReizen']))
+    uitchecks['total_journeys'] = [sum_dict[i] for i in uitchecks.index]
+    uitchecks = uitchecks[~uitchecks.index.duplicated(keep='first')]
     print(uitchecks)
+
 
     ALL_LAYERS = {
         "Public Transport": pdk.Layer(
             "HexagonLayer",
             data=uitchecks,
             get_position=["lon", "lat"],
-            radius=100,
-            elevation_scale=4,
+            radius=50,
+            elevation_scale=2,
             elevation_range=[0, 1000],
             extruded=True,
             
-        )
-
+        ),
+        "Bart Stop Exits": pdk.Layer(
+            "ScatterplotLayer",
+            data=uitchecks,
+            get_position=["lon", "lat"],
+            get_color=[200, 30, 0, 160],
+            get_radius="[total_journeys]",
+            radius_scale=0.04,
+        ),
     }
     st.sidebar.markdown("### Map Layers")
     selected_layers = [
@@ -59,10 +71,10 @@ try:
             pdk.Deck(
                 map_style="mapbox://styles/mapbox/light-v9",
                 initial_view_state={
-                    "latitude": 52.2,
-                    "longitude": 4.8,
-                    "zoom": 11,
-                    "pitch": 50,
+                    "latitude": 52.37,
+                    "longitude": 4.93,
+                    "zoom": 13,
+                    "pitch": 30,
                 },
                 layers=selected_layers,
             )
