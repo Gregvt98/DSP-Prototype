@@ -3,7 +3,7 @@ import pandas as pd
 import pydeck as pdk
 from urllib.error import URLError
 
-st.set_page_config(page_title="Mapping Demo", page_icon="🌍")
+st.set_page_config(page_title="Amsterdam Map", page_icon="🌍")
 
 st.markdown("# Amsterdam Map")
 st.sidebar.header("Map of Amsterdam")
@@ -26,7 +26,8 @@ def from_data_file(filename):
 try:
     
     uitchecks = pd.read_csv('gvb_uitchecks_171022.csv')
-    uitchecks = uitchecks.set_index('AankomstHalteNaam').dropna().loc[:,['AankomstLat', 'AankomstLon', 'AantalReizen']]
+    uitchecks = uitchecks.set_index('AankomstHalteNaam').dropna().loc[:,['AankomstLat', 'AankomstLon', 'AantalReizen', 'UurgroepOmschrijving (van aankomst)']]
+    uitchecks_per_hour = uitchecks.copy()
     uitchecks_summed = uitchecks.groupby('AankomstHalteNaam').aggregate(sum)
 
     uitchecks['lon'] = uitchecks['AankomstLat']
@@ -35,7 +36,9 @@ try:
     sum_dict = dict(zip(uitchecks_summed.index, uitchecks_summed['AantalReizen']))
     uitchecks['total_journeys'] = [sum_dict[i] for i in uitchecks.index]
     uitchecks = uitchecks[~uitchecks.index.duplicated(keep='first')]
-    print(uitchecks)
+    # print(uitchecks)
+    print(uitchecks_per_hour)
+    
 
     ALL_LAYERS = {
         "Public Transport": pdk.Layer(
