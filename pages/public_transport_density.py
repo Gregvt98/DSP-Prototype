@@ -5,11 +5,12 @@ from urllib.error import URLError
 
 st.set_page_config(page_title="Dataframe Demo", page_icon="📊")
 
-st.markdown("# DataFrame Demo")
-st.sidebar.header("DataFrame Demo")
+st.markdown("# Traffic density by day")
+st.sidebar.header("Traffic density by day")
 st.write(
-    """This demo shows how to use `st.write` to visualize Pandas DataFrames.
-(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)"""
+    """This page visualizes the amount of passengers that checked out for a single or multiple selected stops
+     per hour for a given day. By comparing different days, we can detect unusual behaviour in terms
+      of traffic density."""
 )
 
 
