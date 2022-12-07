@@ -36,7 +36,13 @@ try:
     sum_dict = dict(zip(uitchecks_summed.index, uitchecks_summed['AantalReizen']))
     uitchecks['total_journeys'] = [sum_dict[i] for i in uitchecks.index]
     uitchecks = uitchecks[~uitchecks.index.duplicated(keep='first')]
-    # print(uitchecks)
+    uitchecks = uitchecks.loc[uitchecks["lon"] < 4.98]
+    uitchecks = uitchecks.loc[uitchecks["lon"] > 4.92]
+    uitchecks = uitchecks.loc[uitchecks["lat"] < 52.4]
+    uitchecks = uitchecks.loc[uitchecks["lat"] > 52.35]
+
+
+    print(uitchecks)
     print(uitchecks_per_hour)
     
 
@@ -57,7 +63,7 @@ try:
             get_position=["lon", "lat"],
             get_color=[200, 30, 0, 160],
             get_radius="[total_journeys]",
-            radius_scale=0.04,
+            radius_scale=0.08,
         ),
     }
     st.sidebar.markdown("### Map Layers")
