@@ -8,9 +8,10 @@ st.set_page_config(page_title="Amsterdam Map", page_icon="🌍")
 st.markdown("# Amsterdam Map")
 st.sidebar.header("Map of Amsterdam")
 st.write(
-    """This demo shows how to use
-[`st.pydeck_chart`](https://docs.streamlit.io/library/api-reference/charts/st.pydeck_chart)
-to display geospatial data."""
+    """This page shows different visualisations for selected modalities 
+    of a selected region in Amsterdam. For public transport, the 
+    circles represent stops and the size of the circle represents the amount of
+    passengers checking out at this stop"""
 )
 
 
@@ -47,17 +48,7 @@ try:
     
 
     ALL_LAYERS = {
-        "Public Transport": pdk.Layer(
-            "HexagonLayer",
-            data=uitchecks,
-            get_position=["lon", "lat"],
-            radius=50,
-            elevation_scale=2,
-            elevation_range=[0, 1000],
-            extruded=True,
-            
-        ),
-        "Circle Map": pdk.Layer(
+        "Public transport density": pdk.Layer(
             "ScatterplotLayer",
             data=uitchecks,
             get_position=["lon", "lat"],
